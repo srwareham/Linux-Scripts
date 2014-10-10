@@ -1,13 +1,20 @@
 #!/bin/bash
 
 # Written by Sean Wareham on October 9, 2014
-
 # This script aims to make converting  directories of files with ffmpeg easy on any system with bash installed
 # This script recursively recreates the previous file hierarchy--only containing files of the desired output format
-
 # NOTE: This script is not yet functioning
+# IDEAS: Perhaps add a confirm dialog for passing a directory. If pass "~" could take unexpectedly long
+# use helper file to get directoryToSearch
+# use helper file to get outputDirectory
+# create list of file extensions, pass this to helper file/function to then
+# generate regex expression
+# Great one liner sourced from https://stackoverflow.com/questions/59895/can-a-bash-script-tell-what-directory-its-stored-in
+# Gives us the directory of this script
+scriptDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-#IDEAS: Perhaps add a confirm dialog for passing a directory. If pass "~" could take unexpectedly long
+# Import utils script. NOTE: this file can't be moved or renamed
+. "$scriptDir"/utils.bash
 
 #--------------------Constants------------------
 # File formats we wish to convert
@@ -27,21 +34,6 @@ directoryToSearch="$1"
 if [ -z "$1" ]; then
 directoryToSearch="$PWD"
 fi
-
-
-#-----------------Utility Functions-----------
-getFileName(){
-    local filename="$(basename "$1")"
-    echo "$filename"
-}
-
-createDirIfNeeded() {
-    if [ ! -d "$1" ]; then
-        mkdir "$1"
-    fi
-}
-
-
 
 #----------------Setting up Output------------
 outputDirectory="$2"
