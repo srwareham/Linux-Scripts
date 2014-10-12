@@ -15,6 +15,8 @@ scriptDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 # Import utils script. NOTE: this file can't be moved or renamed
 . "$scriptDir"/utils.bash
+# Import parsing script.
+. "$scriptDir"/parsing.bash
 
 #--------------------Constants------------------
 # File formats we wish to convert
@@ -26,14 +28,9 @@ acodec="libfdk_aac"
 # Output file extension
 outputExtension="mp4"
 
-# Set the directory to search to be the first arg
-directoryToSearch="$1"
-# If no arg given, set search directory to current working directory
-# NOTE: we do not use an $ in front of directoryToSearch because it is not
-# defined if we reach this segment of code
-if [ -z "$1" ]; then
-directoryToSearch="$PWD"
-fi
+# Set search directory to be first arg.  If none given, set as current working directory
+#TODO: do there need to be quotes around the ampersand?
+directoryToSearch=$(getInputDirectoryPath "$@")
 
 #----------------Setting up Output------------
 outputDirectory="$2"
@@ -41,13 +38,15 @@ outputDirectory="$2"
 # With the directoryToSearch's name + "[$outputExtension]
 # This directory will be created if it does not already exist
 # NOTE: we remove duplicate / for the edge cases of when the parent dir is /
-# Otherwise we would have //tmp/ for example
+# Otherwise we would have //tmp/ for example.
+# Need to do this twice for it to work when we want /[mp4] for example. Really shouldn't want that, though.
 if [ -z "$2" ]; then
     parentDir=$(dirname "$directoryToSearch")
     base=$(basename "$directoryToSearch")
 # a forward slash is hardcoded, but we don't mind seeing as this is bash :)
     unparsed="$parentDir/$base[$outputExtension]"
-    outputDirectory=$(echo "$unparsed" | sed 's,//,/,g')
+    stage2=$(echo "$unparsed" | sed 's,//,/,g')
+    outputDirectory=$(echo "$stage2" | sed 's,//,/,g')
 fi
 
 #---------------Input Verification---------------------
@@ -73,5 +72,8 @@ convertDesiredFiles(){
 copyPreviouslyAcceptableFiles(){
     echo hi
 }
-convertDesiredFiles
-echo $outputDirectory
+
+printMe() {
+    echo "You wanted to print me: $1 and it worked!"
+}
+processFilesInDirectory printMe /tmp mp4 avi mkv
