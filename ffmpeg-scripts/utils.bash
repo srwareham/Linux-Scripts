@@ -12,6 +12,8 @@ createDirIfNeeded() {
 #3rd on are file extensions to be included in search
 #NOTE: each argument starting at index 2 should be a file extension by itself with no "."
 #NOTE: The function in the first parameter can exist either in this file (utils.bash) or in the calling file
+#BUG #TODO: Currently this implementation only works with find (GNU findutils) 4.4.2
+#NOTE: functionToApply is provided the full file path of every file with the designated file extensions
 processFilesInDirectory(){
     if [[ $# < 3 ]]; then
         echo "Too few arguments given."
@@ -26,9 +28,8 @@ processFilesInDirectory(){
          extensionsRegex+="${args[$i]}\\|"
     done
     extensionsRegex+="${args[$minusOne]}\\)"
-
     functionToApply="$1"
-    directoryToSearch="$2"
+    local searchDir="$2"
     # Cannot combine these next two lines for some reason. Assuming underlying type conversion is at play.
     files="$( find "$directoryToSearch" -regex "$extensionsRegex" 2>/dev/null )"
     for file in $files 
@@ -40,7 +41,7 @@ processFilesInDirectory(){
 #-----------Input Verification Utils---------
 validateDirectory() {
     if [ ! -d "$1" ]; then
-        echo \""$1"\" is not a valid directory. Terminating program.
+        echo "ERROR: \"$1\"" is not a valid directory. Terminating program.
         exit -1
     fi
 }
