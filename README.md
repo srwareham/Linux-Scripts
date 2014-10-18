@@ -13,3 +13,9 @@ Convenience scripts for everyday linux
 * time-syncer
   * Script to sync linux clock with NTP time server without password
   * Requires root
+
+Dependencies:
+* Mac OS X
+  * brew install findutils
+    - used for ffmpeg-scripts
+    - Existing heuristic could likely be ported easily to BSD find

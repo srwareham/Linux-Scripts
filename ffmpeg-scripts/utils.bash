@@ -15,6 +15,11 @@ createDirIfNeeded() {
 #BUG #TODO: Currently this implementation only works with find (GNU findutils) 4.4.2
 #NOTE: functionToApply is provided the full file path of every file with the designated file extensions
 processFilesInDirectory(){
+    if [[ $(uname -s) = "Darwin" ]]; then
+        findUtil="gfind"
+    else
+        findUtil="find"
+    fi
     if [[ $# < 3 ]]; then
         echo "Too few arguments given."
         echo "Please provide: function to apply to each file path, directory to search, file extensio(s)"
@@ -31,7 +36,7 @@ processFilesInDirectory(){
     functionToApply="$1"
     local searchDir="$2"
     # Cannot combine these next two lines for some reason. Assuming underlying type conversion is at play.
-    files="$( find "$directoryToSearch" -regex "$extensionsRegex" 2>/dev/null )"
+    files="$( "$findUtil" "$directoryToSearch" -regex "$extensionsRegex" 2>/dev/null )"
     for file in $files 
     do
         "$functionToApply" "$file"
