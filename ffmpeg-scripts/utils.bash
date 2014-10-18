@@ -12,8 +12,7 @@ createDirIfNeeded() {
 #3rd on are file extensions to be included in search
 #NOTE: each argument starting at index 2 should be a file extension by itself with no "."
 #NOTE: The function in the first parameter can exist either in this file (utils.bash) or in the calling file
-#BUG #TODO: Currently this implementation only works with find (GNU findutils) 4.4.2
-#NOTE: functionToApply is provided the full file path of every file with the designated file extensions
+#NOTE: functionToApply needs to be provided the full file path of every file with the designated file extensions
 processFilesInDirectory(){
     if [[ $(uname -s) = "Darwin" ]]; then
         local findUtil="gfind"

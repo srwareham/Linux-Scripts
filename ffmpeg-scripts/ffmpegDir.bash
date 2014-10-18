@@ -83,12 +83,16 @@ moveFile(){
 }
 
 # Returns the new path of a given input file.
-# TODO: Needs to support preservation of input file hierarchies. Currently
-# only outputs all files to the top level output directory
 getOutputPath(){
     local filename=$(getJustFilename "$1")
-    local outputPath="$outputDirectory/$filename.$outputExtension"
-    echo "$outputPath"
+    local parentLength=${#directoryToSearch}
+    local childLength=${#1}
+    let childLength-=parentLength
+    let startIndex=parentLength+1
+    local childPath=${1:startIndex:childLength}
+    local outputPath="$outputDirectory/$childPath"
+    newChildDir=$(dirname "$outputPath")
+    echo "$newChildDir/$filename.$outputExtension"
 }
 
 # Function to either move or convert a file based on its file extension

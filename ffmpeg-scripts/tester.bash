@@ -16,7 +16,8 @@ touch "$vidsDir/one.mp4"
 touch "$vidsDir/two.avi"
 touch "$vidsDir/three.wmv"
 touch "$vidsDir/four.mkv"
-
+mkdir -p "$vidsDir/sub1/sub2"
+touch "$vidsDir/sub1/sub2/five.mkv"
 
 
 ./ffmpegDir.bash "$vidsDir"
