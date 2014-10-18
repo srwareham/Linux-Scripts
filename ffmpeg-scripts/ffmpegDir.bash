@@ -76,9 +76,9 @@ ffmpegConvert(){
 # Parameters are input path and full output path.
 moveFile(){
     if [[ "$DEBUG" = "1" ]]; then
-        echo mv "$1" "$2"
+        echo mv "\"$1\"" "\"$2\""
     else
-        mv "$1" "$2"
+        mv "\"$1\"" "\"$2\""
     fi
 }
 

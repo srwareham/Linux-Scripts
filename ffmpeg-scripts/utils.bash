@@ -25,7 +25,7 @@ processFilesInDirectory(){
         exit -1
     fi
     args=("$@")
-    #extensionsRegex=".*\.\(avi\|wmv\|mkv\|mov\)"
+    #extensionsRegex=".*\.\(avi\|wmv\|mkv\|mov\|mp4\|m4v\)"
     local minusOne=$(($# - 1))
     local extensionsRegex=".*\.\("
     for (( i = 2 ; i < "$minusOne" ; i++ )) do
@@ -36,7 +36,7 @@ processFilesInDirectory(){
     local searchDir="$2"
     # Cannot combine these next two lines for some reason. Assuming underlying type conversion is at play.
     local files="$( "$findUtil" "$directoryToSearch" -regex "$extensionsRegex" 2>/dev/null )"
-    for file in $files 
+    for file in "$files" 
     do
         "$functionToApply" "$file"
     done
