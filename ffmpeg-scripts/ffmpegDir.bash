@@ -24,6 +24,9 @@ vcodec="libx264"
 acodec="libfdk_aac"
 # Output file extension
 outputExtension="mp4"
+# Flag for whether or not to re-encode mp4s if the desired output is mp4. Useful
+# In case you want a new codec for files that are already have the proper container.
+reEncodeInputs=0
 
 # Set search directory to be first arg.  If none given, set as current working directory
 directoryToSearch=$(getInputDirectoryPath "$@")
@@ -58,11 +61,42 @@ fi
 copyPreviouslyAcceptableFiles(){
     echo hi
 }
+# Parameters are input path and full output path. Codecs are global variables.
+# Note: output path includes the file name and extension
+ffmpegConvert(){
+    ffmpeg -i "$1" -acodec "$acodec" -vcodec "$vcodec" "$2"
+}
+# Parameters are input path and full output path.
+moveFile(){
+    mv "$1" "$2"
+}
+
+# Function to either move or convert a file based on its file extension
+ffmpegConvertOrMove(){
+    inputPath="$1"
+    filename=$(getJustFilename "$inputPath")
+    outputPath="$outputDirectory/$filename.$outputExtension"
+    # If we want to re-encode, re-encode, else move the file
+    extLen=${#outputExtension}
+    index=${#inputPath}
+    let index-=$extLen
+    inputExtension=${inputPath:$index:$extLen}
+    if [[ "$reEncodeInputs" = "1" ]];then
+        ffmpegConvert "$inputPath" "$outputPath"
+    else
+        if [[ "$inputExtension" = "$outputExtension" ]]; then
+            moveFile "$inputPath" "$outputPath"
+        else
+            echo "$inputPath"
+            ffmpegConvert "$inputPath" "$outputPath"
+        fi
+    fi 
+}
 
 # Place holder to test processFilesInDirectory.
 printMe() {
     echo "You wanted to print me: $1 and it worked!"
 }
 
-processFilesInDirectory printMe "$directoryToSearch" mp4 wmv avi mkv
+processFilesInDirectory ffmpegConvertOrMove "$directoryToSearch" mp4 wmv avi mkv
 echo "New output Dir: $outputDirectory"
