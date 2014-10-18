@@ -2,7 +2,6 @@
 
 # Written by Sean Wareham on October 9, 2014
 # This script aims to make converting  directories of files with ffmpeg easy on any system with bash installed
-# NOTE: This script is not yet functioning and currently has linux dependencies.
 # IDEAS: Perhaps add a confirm dialog for passing a directory. If pass "~" could take unexpectedly long
 
 
@@ -101,7 +100,7 @@ ffmpegConvertOrMove(){
     local extLen=${#outputExtension}
     local index=${#inputPath}
     let index-=$extLen
-    inputExtension=${inputPath:$index:$extLen}
+    local inputExtension=${inputPath:$index:$extLen}
     if [[ "$reEncodeInputs" = "1" ]];then
         ffmpegConvert "$inputPath" "$outputPath"
     else

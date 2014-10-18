@@ -16,9 +16,9 @@ createDirIfNeeded() {
 #NOTE: functionToApply is provided the full file path of every file with the designated file extensions
 processFilesInDirectory(){
     if [[ $(uname -s) = "Darwin" ]]; then
-        findUtil="gfind"
+        local findUtil="gfind"
     else
-        findUtil="find"
+        local findUtil="find"
     fi
     if [[ $# < 3 ]]; then
         echo "Too few arguments given."
@@ -27,16 +27,16 @@ processFilesInDirectory(){
     fi
     args=("$@")
     #extensionsRegex=".*\.\(avi\|wmv\|mkv\|mov\)"
-    minusOne=$(($# - 1))
-    extensionsRegex=".*\.\("
+    local minusOne=$(($# - 1))
+    local extensionsRegex=".*\.\("
     for (( i = 2 ; i < "$minusOne" ; i++ )) do
          extensionsRegex+="${args[$i]}\\|"
     done
     extensionsRegex+="${args[$minusOne]}\\)"
-    functionToApply="$1"
+    local functionToApply="$1"
     local searchDir="$2"
     # Cannot combine these next two lines for some reason. Assuming underlying type conversion is at play.
-    files="$( "$findUtil" "$directoryToSearch" -regex "$extensionsRegex" 2>/dev/null )"
+    local files="$( "$findUtil" "$directoryToSearch" -regex "$extensionsRegex" 2>/dev/null )"
     for file in $files 
     do
         "$functionToApply" "$file"
@@ -45,9 +45,9 @@ processFilesInDirectory(){
 
 # function the takes full path and returns just the filename (no extension)
 function getJustFilename {
-	fullfile="$1"
-	filename=$(basename "$fullfile")
-	extension="${filename##*.}"
+	local fullfile="$1"
+	local filename=$(basename "$fullfile")
+	local extension="${filename##*.}"
 	filename="${filename%.*}"
 	echo "$filename"
 }
