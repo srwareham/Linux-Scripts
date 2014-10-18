@@ -43,6 +43,15 @@ processFilesInDirectory(){
     done
 }
 
+# function the takes full path and returns just the filename (no extension)
+function getJustFilename {
+	fullfile="$1"
+	filename=$(basename "$fullfile")
+	extension="${filename##*.}"
+	filename="${filename%.*}"
+	echo "$filename"
+}
+
 #-----------Input Verification Utils---------
 validateDirectory() {
     if [ ! -d "$1" ]; then
