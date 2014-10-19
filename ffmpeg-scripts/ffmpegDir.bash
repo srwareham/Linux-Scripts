@@ -47,14 +47,12 @@ outputDirectory=$(getOutputDirectoryPathParameter "$@")
 if [ -z "$outputDirectory" ]; then
     parentDir=$(dirname "$directoryToSearch")
     dirToSearchName=$(basename "$directoryToSearch")
-    unparsed="$parentDir/$dirToSearchName[$outputExtension]"
+    unparsed="$parentDir/$dirToSearchName-$outputExtension"
     # NOTE: we remove duplicate /'s for the edge cases of when the parent dir is /
     # Need to do this twice for it to work when we want /[mp4] for example. 
     outputDirectory=$(getWithoutDoubleSlashes "$unparsed")
-else
-    createDirIfNeeded "$outputDirectory"
 fi
-validateDirectory "$outputDirectory"
+createDirIfNeeded "$outputDirectory"
 
 #------------------File Manipulation Logic--------
 
