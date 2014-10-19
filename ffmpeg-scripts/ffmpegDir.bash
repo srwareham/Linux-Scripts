@@ -48,12 +48,13 @@ if [ -z "$outputDirectory" ]; then
     parentDir=$(dirname "$directoryToSearch")
     dirToSearchName=$(basename "$directoryToSearch")
     unparsed="$parentDir/$dirToSearchName[$outputExtension]"
-    # NOTE: we remove duplicate / for the edge cases of when the parent dir is /
-    # Really shouldn't run a find over entire file system though.
-    stage2=$(echo "$unparsed" | sed 's,//,/,g')
+    # NOTE: we remove duplicate /'s for the edge cases of when the parent dir is /
     # Need to do this twice for it to work when we want /[mp4] for example. 
-    outputDirectory=$(echo "$stage2" | sed 's,//,/,g')
+    outputDirectory=$(getWithoutDoubleSlashes "$unparsed")
+else
+    createDirIfNeeded "$outputDirectory"
 fi
+validateDirectory "$outputDirectory"
 
 #------------------File Manipulation Logic--------
 
@@ -92,7 +93,9 @@ getOutputPath(){
     local childPath=${1:startIndex:childLength}
     local outputPath="$outputDirectory/$childPath"
     newChildDir=$(dirname "$outputPath")
-    echo "$newChildDir/$filename.$outputExtension"
+    unparsed="$newChildDir/$filename.$outputExtension"
+    parsed=$(getWithoutDoubleSlashes "$unparsed")
+    echo "$parsed"
 }
 
 # Function to either move or convert a file based on its file extension

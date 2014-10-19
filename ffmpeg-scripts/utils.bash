@@ -58,3 +58,14 @@ validateDirectory() {
         exit -1
     fi
 }
+
+#----------String Processing-------------
+# Note: most UNIX systems don't care about too many /'s but might as well be consistent
+# This will not remove an arbitrary number of slashes.
+# Choosing not to add in a while loop for unneeded edge cases.
+getWithoutDoubleSlashes(){
+    stage1=$(echo "$1" | sed 's,//,/,g')
+    # Need to do this twice for it to work when we want /[mp4] for example. 
+    ans=$(echo "$stage1" | sed 's,//,/,g')
+    echo "$ans"
+}
