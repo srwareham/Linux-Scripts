@@ -115,5 +115,6 @@ ffmpegConvertOrMove(){
         fi
     fi 
 }
-
-processFilesInDirectory ffmpegConvertOrMove "$directoryToSearch" mp4 m4v wmv avi mkv
+# Search and process typical media types
+# TODO: switch to defaults types that are overridden 
+processFilesInDirectory ffmpegConvertOrMove "$directoryToSearch" mp4 m4v wmv avi mkv webm flv
