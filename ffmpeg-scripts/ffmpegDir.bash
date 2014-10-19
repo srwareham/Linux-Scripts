@@ -88,7 +88,7 @@ getOutputPath(){
     local parentLength=${#directoryToSearch}
     local childLength=${#1}
     let childLength-=parentLength
-    let startIndex=parentLength+1
+    let startIndex=parentLength
     local childPath=${1:startIndex:childLength}
     local outputPath="$outputDirectory/$childPath"
     newChildDir=$(dirname "$outputPath")
@@ -99,7 +99,6 @@ getOutputPath(){
 ffmpegConvertOrMove(){
     local inputPath="$1"
     local outputPath=$(getOutputPath "$inputPath")
-    
     # If we want to re-encode, re-encode, else move the file
     local extLen=${#outputExtension}
     local index=${#inputPath}

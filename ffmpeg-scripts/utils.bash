@@ -35,7 +35,7 @@ processFilesInDirectory(){
     local functionToApply="$1"
     local searchDir="$2"
     # Cannot combine these next two lines for some reason. Assuming underlying type conversion is at play.
-    "$findUtil" "$directoryToSearch" -regex "$extensionsRegex" | while read ln
+    "$findUtil" "$directoryToSearch" -regex "$extensionsRegex" 2>/dev/null | while read ln
     do
         "$functionToApply" "$ln"
     done
