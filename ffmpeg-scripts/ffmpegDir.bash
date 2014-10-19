@@ -25,9 +25,9 @@ acodec="libfdk_aac"
 outputExtension="mp4"
 # Flag for whether or not to re-encode mp4s if the desired output is mp4. Useful
 # In case you want a new codec for files that are already have the proper container.
-reEncodeInputs=0
+reEncodeInputs=1
 # Flag for debug mode. Commands will only be echoed.
-DEBUG=1
+DEBUG=0
 
 # Set search directory to be first arg.  If none given, set as current working directory
 directoryToSearch=$(getInputDirectoryPath "$@")
@@ -68,7 +68,7 @@ ffmpegConvert(){
     if [[ "$DEBUG" = "1" ]]; then
         echo ffmpeg -i "\"$1\"" -acodec "$acodec" -vcodec "$vcodec" "\"$2\""
     else
-        ffmpeg -i "\"$1\"" -acodec "$acodec" -vcodec "$vcodec" "\"$2\""
+        ffmpeg -i "$1" -acodec "$acodec" -vcodec "$vcodec" "$2"
     fi
 }
 
