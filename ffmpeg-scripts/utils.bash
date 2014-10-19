@@ -13,6 +13,7 @@ createDirIfNeeded() {
 #NOTE: each argument starting at index 2 should be a file extension by itself with no "."
 #NOTE: The function in the first parameter can exist either in this file (utils.bash) or in the calling file
 #NOTE: functionToApply needs to be provided the full file path of every file with the designated file extensions
+#BUG: If you pass "/tmp" to find it will not work. "/tmp/" will work. May later add logic to prevent this.
 processFilesInDirectory(){
     if [[ $(uname -s) = "Darwin" ]]; then
         local findUtil="gfind"
