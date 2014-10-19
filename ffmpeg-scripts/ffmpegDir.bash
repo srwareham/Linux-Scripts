@@ -102,6 +102,8 @@ getOutputPath(){
 ffmpegConvertOrMove(){
     local inputPath="$1"
     local outputPath=$(getOutputPath "$inputPath")
+    #create outputpath if needed
+    createDirIfNeeded $(dirname "$outputPath")
     # If we want to re-encode, re-encode, else move the file
     local extLen=${#outputExtension}
     local index=${#inputPath}
