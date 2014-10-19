@@ -67,9 +67,9 @@ copyPreviouslyAcceptableFiles(){
 # Note: output path includes the file name and extension
 ffmpegConvert(){
     if [[ "$DEBUG" = "1" ]]; then
-        echo ffmpeg -i "$1" -acodec "$acodec" -vcodec "$vcodec" "$2"
+        echo ffmpeg -i "\"$1\"" -acodec "$acodec" -vcodec "$vcodec" "\"$2\""
     else
-        ffmpeg -i "$1" -acodec "$acodec" -vcodec "$vcodec" "$2"
+        ffmpeg -i "\"$1\"" -acodec "$acodec" -vcodec "$vcodec" "\"$2\""
     fi
 }
 
@@ -116,4 +116,4 @@ ffmpegConvertOrMove(){
     fi 
 }
 
-processFilesInDirectory ffmpegConvertOrMove "$directoryToSearch" mp4 wmv avi mkv
+processFilesInDirectory ffmpegConvertOrMove "$directoryToSearch" mp4 m4v wmv avi mkv
