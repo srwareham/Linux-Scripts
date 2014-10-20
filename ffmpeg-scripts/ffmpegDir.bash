@@ -15,6 +15,9 @@ scriptDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 . "$scriptDir/parsing.bash"
 
 #--------------------Constants------------------
+# execute.sh path
+executePath="/tmp/execution/execute.sh"
+createDirIfNeeded "/tmp/execution"
 # File formats we wish to convert
 # TODO: add overloading defaults with parameters from command line
 # Output file video codec
@@ -55,7 +58,7 @@ fi
 createDirIfNeeded "$outputDirectory"
 
 #------------------File Manipulation Logic--------
-
+executePath
 # For files that were already the proper file format, copy them to the output location
 # Perhaps add option to convert mp4s as well. In case codec was different or lousy
 copyPreviouslyAcceptableFiles(){
@@ -68,7 +71,7 @@ ffmpegConvert(){
     if [[ "$DEBUG" = "1" ]]; then
         echo ffmpeg -i "\"$1\"" -acodec "$acodec" -vcodec "$vcodec" "\"$2\""
     else
-        ffmpeg -i "$1" -acodec "$acodec" -vcodec "$vcodec" "$2"
+        echo ffmpeg -i "\"$1\"" -acodec "$acodec" -vcodec "$vcodec" "\"$2\"" >> "$executePath"
     fi
 }
 
@@ -77,7 +80,7 @@ moveFile(){
     if [[ "$DEBUG" = "1" ]]; then
         echo mv "\"$1\"" "\"$2\""
     else
-        mv "\"$1\"" "\"$2\""
+        echo mv "\"$1\"" "\"$2\"" >> "$executePath"
     fi
 }
 
@@ -101,7 +104,7 @@ ffmpegConvertOrMove(){
     local inputPath="$1"
     local outputPath=$(getOutputPath "$inputPath")
     #create outputpath if needed
-    createDirIfNeeded $(dirname "$outputPath")
+    createDirIfNeeded "$(dirname "$outputPath")"
     # If we want to re-encode, re-encode, else move the file
     local extLen=${#outputExtension}
     local index=${#inputPath}
@@ -117,6 +120,10 @@ ffmpegConvertOrMove(){
         fi
     fi 
 }
+
+rm "$executePath"
+
 # Search and process typical media types
 # TODO: switch to defaults types that are overridden 
 processFilesInDirectory ffmpegConvertOrMove "$directoryToSearch" mp4 m4v wmv avi mkv webm flv
+sh "$executePath"
