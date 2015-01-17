@@ -55,6 +55,8 @@ createMSMTPRC(){
     echo "port 587" >> .msmtprc
     echo >> .msmtprc
     echo "account default : gmail" >> .msmtprc
+    # can only have rw user rights
+    chmod 600 .msmtprc
 }
 
 createMAILRC(){
