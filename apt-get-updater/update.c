@@ -28,5 +28,6 @@ int main() {
     setuid(0);
     system("sudo apt-get update");
     system("sudo apt-get upgrade");
+    system("sudo apt-get autoclean");
     return 0;
 }
