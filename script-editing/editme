@@ -1,0 +1,62 @@
+#!/bin/bash
+# Written by Sean Wareham on February 2, 2015
+# This script it used for simplified cat / nano access of a file
+# If the argument given exists in the current working directory or the PATH,
+# the user is shown the contents of the file and is then
+# prompted whether or not he/ she would like edit the file
+
+arg="$1"
+
+# Logic from F. Hauri at: https://stackoverflow.com/questions/226703/how-do-i-prompt-for-input-in-a-linux-shell-script
+# Prompt "$1" perform "$2" if yes "$3" if no (or bad input)
+# @params $1 The message to be prompted
+# @params $2 The function / file to execute in the yes case
+# @params $3 The function / file to execute in the no case
+promptUser(){
+    #TODO: change these ---'s to be dynamically sized as the size of $1
+    echo 
+    echo "---------------------------------------"
+    echo  "$1"
+    echo "---------------------------------------"
+    stty raw -echo ; answer=$(head -c 1) ; stty sane # Care playing with stty
+    if echo "$answer" | grep -iq "^y" ;then
+        "$2"
+    else
+        "$3"
+    fi
+}
+
+# Function to edit the file
+# Needs to be run only after editme where file is confirmed to be valid
+nanome(){
+    nano "$file"
+}
+
+# Function to exit with success return status
+exitme(){
+    return 0
+}
+
+editme(){
+    file="$arg"
+    exits=0
+    if [ ! -f "$file" ]; then
+        exists=1
+        file=$(which "$file")
+        if [ "$?" -eq 0 ]; then
+            exists=0
+        fi
+    fi
+    
+    if [ "$exists" = "1" ]; then
+        echo "ERROR: File \"$arg\" is not discoverable"
+        return 1
+    fi
+
+    cat "$file"
+    message="Would you like to edit this file? (y/n)"
+    promptUser "$message" nanome exitme
+
+}
+
+editme
